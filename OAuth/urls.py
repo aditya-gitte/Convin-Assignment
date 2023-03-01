@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('rest/v1/calendar/init/', views.GoogleCalendarInitView),
+    path('rest/v1/calendar/redirect/', views.GoogleCalendarRedirectView)
 ]
