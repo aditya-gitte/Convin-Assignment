@@ -2,8 +2,14 @@ import urllib.parse
 import requests
 import google.oauth2.credentials
 from googleapiclient.discovery import build
+from django.http import HttpResponseRedirect, JsonResponse
+import json
 from datetime import datetime, time, timedelta
-from django.http import HttpResponseRedirect
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+
+
 
 
 def GoogleCalendarInitView(request):
@@ -72,6 +78,10 @@ def GoogleCalendarRedirectView(request):
     # Get the events from the response object
     events = events_result.get('items', [])
 
+    #converting the list to JSON
+    response_data = {'events': events}
+
+
     # Print the events
     if not events:
         print('No events found.')
@@ -81,3 +91,6 @@ def GoogleCalendarRedirectView(request):
             start = event['start'].get('dateTime', event['start'].get('date'))
             start_time = datetime.fromisoformat(start)
             print(f'{event["summary"]} ({start_time.strftime("%m/%d/%Y %I:%M %p")})')
+
+
+    return JsonResponse(response_data)
